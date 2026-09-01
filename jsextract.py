@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 """JS Endpoint Extractor - cleaner static extraction for bundled JavaScript."""
 
 import argparse
@@ -8,7 +8,7 @@ from pathlib import Path
 import urllib.request
 from urllib.parse import urlparse
 
-# Only accept quoted string literals. This avoids most minified-code noise.
+
 URL_RE = re.compile(r"""["']((?:https?|wss?)://[^"'<>\\\s]+)["']""", re.I)
 PATH_RE = re.compile(
     r"""["']((?:/(?!/)|\./|\.\./)[A-Za-z0-9_./:@?&=%+\-~]+)["']"""
@@ -20,8 +20,6 @@ DOMAIN_RE = re.compile(
 )
 GRAPHQL_RE = re.compile(r"""["']([^"'\\\s]*graphql[^"'\\\s]*)["']""", re.I)
 
-# Parameters are only extracted from obvious URL/query strings, not arbitrary
-# property access such as ".token" or ".pathname".
 QUERY_PARAM_RE = re.compile(r"""[?&]([A-Za-z][A-Za-z0-9_.-]{1,40})(?:=|&|$)""")
 
 EXTENSION_RE = re.compile(
@@ -52,7 +50,7 @@ def extract(text):
 
     for value in PATH_RE.findall(text):
         value = clean(value)
-        # Ignore obvious source-map/module noise and tiny non-endpoint paths.
+     
         if len(value) < 2:
             continue
         if value.startswith(("/static/", "/assets/")) and not EXTENSION_RE.search(value):
